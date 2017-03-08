@@ -5,26 +5,28 @@ __auther__ = 'xiaohuahu94@gmail.com'
 
 import urllib,urllib2
 import sys,time 
+import os
 import re
 import requests
 global fail_sum
 def SaveImage(addr):
   try:	
-  	headers = { 'User-Agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'  ,
-                        'Referer':'https://jp.netcdn.space/digital/video/' }    
+  	headers = { 'User-Agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'   }    
  	u=requests.get(addr,headers=headers)
  	data = u
  	splitPath = addr.split('/')
  	fName = splitPath.pop()
  	now = time.strftime("%Y-%m-%d %H:%M:%S")
- 	print fName,'saved',now
- 	f= open(fName,'wb')
+	print fName,'saved',now
+	sentence = " osascript -e 'display notification \"lol\" with title \"Completed\"' "
+	os.system(sentence)
+	f= open(fName,'wb')
  	f.write(data.content)
  	f.close()
   except Exception,e:
  	print 'failed :'+str(e)
 
-def GetMany(head,tail):
+def GetOne(head,tail):
  time.sleep(0.5)
  url = 'https://avmo.pw/en/search/'
  xx=str(tail)
@@ -95,15 +97,15 @@ def main():
 	    	print "番号长度太短"
 	    	sys.exit()
 	    print 'Thank avmo.pw a lot'
-	    print head
-	    print tail
-	    tail = int(tail)
-	    while(1):
-	       GetMany(head,tail)
+	    head = GetHead(key)
+	    tail = int(GetTail(key))
+        while(1):
+	       GetOne(head,tail)
 	       tail = tail + 1
-	       if fail_sum>10:
-	       	print '此系列已到最大'
-	        sys.exit()
+	       # global fail_sum
+	       # if fail_sum>10:
+	       # 	print '此系列已到最大'
+	       #  sys.exit()
 if __name__ == '__main__':
 	main()
 
